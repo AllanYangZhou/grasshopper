@@ -123,8 +123,22 @@ router.post('/share', function(req, res) {
       json: true,
       data: {
         recipientUsernames: mobile_recipients,
+        content_type: content_type,
         content: content,
         receipt: false
+      }
+    });
+
+    // send gcm requests
+    request({
+      method: 'POST',
+      url: 'https://gcm-http.googleapis.com/gcm/send',
+      headers: {'Authorization': 'key=AIzaSyDPo_ZESJy9y6oOB8abtyya5lgZsOsk7yU'},
+      json: true,
+      data: {
+        recipientUsernames: desktop_recipients,
+        content_type: content_type,
+        content: content
       }
     });
   });
