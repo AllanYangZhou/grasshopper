@@ -88,7 +88,7 @@ router.post('/connect', function(req, res) {
 // when someone shares content
 router.post('/share', function(req, res) {
   var src_uid = req.body.src_uid;
-  var target_uids = req.body.target_uids;
+  var target_uids = eval(req.body.target_uids); //total hack
   var content_type = req.body.content_type;
   var content = {
     message: req.body.content,
@@ -106,41 +106,51 @@ router.post('/share', function(req, res) {
     var mobile_recipients = [];
     var desktop_recipients = [];
     users.forEach(function(user) {
-      if (user.device_type === "mobile")
-        mobile_recipients.append(user.name);
-      else
-        desktop_recipients.append(user.name);
+      if (user.uid != src_uid) {
+        if (user.device_type === "mobile")
+          mobile_recipients.push(user.name);
+        else
+          desktop_recipients.push(user.name);
+      }
     });
 
     // send magnet requests
-    request({
-      method: 'POST',
-      url: '',
-      headers: {
-        'X-mmx-app-id': '',
-        'X-mmx-api-key': ''
-      },
-      json: true,
-      data: {
-        recipientUsernames: mobile_recipients,
-        content_type: content_type,
-        content: content,
-        receipt: false
-      }
-    });
+    if (mobile_recipients.length) {
+      request({
+        method: 'POST',
+        url: '',
+        headers: {
+          'X-mmx-app-id': '',
+          'X-mmx-api-key': ''
+        },
+        json: true,
+        data: {
+          recipientUsernames: mobile_recipients,
+          content_type: content_type,
+          content: content,
+          receipt: false
+        }
+      });
+    }
 
     // send gcm requests
-    request({
-      method: 'POST',
-      url: 'https://gcm-http.googleapis.com/gcm/send',
-      headers: {'Authorization': 'key=AIzaSyDPo_ZESJy9y6oOB8abtyya5lgZsOsk7yU'},
-      json: true,
-      data: {
-        recipientUsernames: desktop_recipients,
-        content_type: content_type,
-        content: content
-      }
-    });
+    if (desktop_recipients.length) {
+      request({
+        method: 'POST',
+        url: 'https://gcm-http.googleapis.com/gcm/send',
+        headers: {'Authorization': 'key=AIzaSyDPo_ZESJy9y6oOB8abtyya5lgZsOsk7yU'},
+        json: true,
+        data: {
+          recipientUsernames: desktop_recipients,
+          content_type: content_type,
+          content: content
+        }
+      }, function(err, response, body) {
+        if (err)
+          console.log("Failed to make request to gcm" + err);
+      });
+      res.status(200).end();
+    }
   });
 });
 
