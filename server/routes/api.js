@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-var querystring = require('querystring');
+var request = require('request');
 var http = require('http');
 
 var mongoose = require('mongoose');
@@ -112,36 +112,21 @@ router.post('/share', function(req, res) {
         desktop_recipients.append(user.name);
     });
 
-    // see http://stackoverflow.com/a/6158966
     // send magnet requests
-    var magnet_post_data = querystring.stringify({
-      'recipient_usernames': mobile_recipients,
-      'content': content,
-      'receipt': false
-    });
-
-    var magnet_post_options = {
-      host: '',
-      port: '',
-      path: '',
+    request({
       method: 'POST',
+      url: '',
       headers: {
         'X-mmx-app-id': '',
-        'X-mmx-api-key': '',
-        'Content-Type': 'application/json',
-        'Content-Length': magnet_post_data.length
+        'X-mmx-api-key': ''
+      },
+      json: true,
+      data: {
+        recipientUsernames: mobile_recipients,
+        content: content,
+        receipt: false
       }
-    };
-
-    var magnet_post_req = http.request(magnet_post_options, function(res) {
-      res.setEncoding('utf8');
-      res.on('data', function(chunk) {
-        console.log('Response: ' + chunk);
-      });
     });
-
-    magnet_post_req.write(magnet_post_data);
-    magnet_post_req.end();
   });
 });
 
