@@ -64,18 +64,16 @@ router.post('/connect', function(req, res) {
     });
     // get the data for the connected people and send it as a response
     var connected_data = [];
-    User.find(list_of_uids, function(err, users) {
+    User.find({"$or": list_of_uids}, function(err, users) {
       if (err)
         console.log("Failed to look up connected user in Users");
 
       users.forEach(function(user){
-        if (user.uid !== uid) {
-          connected_data.push({
-            uid: user.uid,
-            name: user.name,
-            device_type: user.device_type
-          });
-        }
+        connected_data.push({
+          uid: user.uid,
+          name: user.name,
+          device_type: user.device_type
+        });
       });
 
       res.status(200).json({
@@ -99,7 +97,7 @@ router.post('/share', function(req, res) {
   target_uids.forEach(function(target_uid) {
     list_of_uids.push({uid: target_uid});
   });
-  User.find(list_of_uids, function(err, users) {
+  User.find({"$or": list_of_uids}, function(err, users) {
     if (err)
       console.log("Error finding targets to share with");
     // separate recipients
@@ -130,6 +128,13 @@ router.post('/share', function(req, res) {
           content: content,
           receipt: false
         }
+      }, function(err, response, body) {
+        if (err) {
+          console.log("Failed to make request to magnet" + err);
+          res.status(500).end();
+        } else {
+          res.status(200).end();
+        }
       });
     }
 
@@ -146,10 +151,13 @@ router.post('/share', function(req, res) {
           content: content
         }
       }, function(err, response, body) {
-        if (err)
+        if (err) {
           console.log("Failed to make request to gcm" + err);
+          res.status(500).end();
+        } else {
+          res.status(200).end();
+        }
       });
-      res.status(200).end();
     }
   });
 });
