@@ -92,7 +92,7 @@ router.post('/share', function(req, res) {
   var content_type = req.body.content_type;
   var content = {
     message: req.body.content,
-    date: req.body.timestamp
+    date: Date.now()
   }
 
   var list_of_uids = [];
@@ -116,17 +116,17 @@ router.post('/share', function(req, res) {
 
     // send magnet requests
     if (mobile_recipients.length) {
+      request.post({url: 'http://40.122.208.196:5220/mmxmgmt/api/v1/send_message'})
       request({
         method: 'POST',
-        url: '',
+        url: 'http://40.122.208.196:5220/mmxmgmt/api/v1/send_message',
         headers: {
-          'X-mmx-app-id': '',
-          'X-mmx-api-key': ''
+          'X-mmx-app-id': 'j7giflogogp',
+          'X-mmx-api-key': '32e7d37e-2205-4782-81f4-1e05a124dff8'
         },
         json: true,
-        data: {
-          recipientUsernames: mobile_recipients,
-          content_type: content_type,
+        body: {
+          recipientUsernames: ['jane.doe'], //recipientUsernames: mobile_recipients,
           content: content,
           receipt: false
         }
@@ -149,7 +149,6 @@ router.post('/share', function(req, res) {
         json: true,
         data: {
           recipientUsernames: desktop_recipients,
-          content_type: content_type,
           content: content
         }
       }, function(err, response, body) {
