@@ -17,29 +17,17 @@ function sendRegistrationId(callback) {
   //alert(regId);
   var data = {
     "uid": regId,
-    "name": "CHiCHICHICHIAAAAAAA",
-    "device_type": "Browser"
-  }
+    "name": "BOB",
+    "device_type": "desktop"
+  };
 
-  $.ajax(
-    method: "POST",
-    url: "40.122.208.196:3002",
-    data: data,
-    success: onSuccessSending,
-    error: onErrorSending,
-    )
-}
-
-function onSuccessSending(data, textStatus, xhr)
-{
-  console.log("YAS");
-  callback(true); 
-}
-
-function onErrorSending(data, textStatus, xhr)
-{
-  console.log("Unable to reach server.");
-  callback(false);  
+  $.ajax({
+      method: "POST",
+      url: "http://40.122.208.196:3002/api/connect",
+      data: data,
+      success: function() { callback(true); },
+      error: function() { callback(false); },
+  });
 }
 
 function startRegistration() {
