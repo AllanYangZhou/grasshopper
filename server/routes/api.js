@@ -37,6 +37,16 @@ router.post('/connect', function(req, res) {
         if (err)
           console.log("Failed to create new user");
       });
+    } else {
+      var conditions = { uid: uid};
+      var update = {
+        name: name,
+        device_type: device_type
+      };
+      User.update(conditions, update, {}, function(err, numAffected) {
+        if (err)
+          console.log(err);
+      });
     }
   });
 
@@ -117,6 +127,7 @@ router.post('/share', function(req, res) {
     });
 
     // send magnet requests
+    console.log(mobile_recipients);
     if (mobile_recipients.length) {
       request({
         method: 'POST',
@@ -132,6 +143,7 @@ router.post('/share', function(req, res) {
           receipt: false
         }
       }, function(err, response, body) {
+        console.log(JSON.stringify(response));
         if (err) {
           console.log("Failed to make request to magnet" + err);
           res.status(500).end();
