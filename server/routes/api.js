@@ -68,13 +68,15 @@ router.post('/connect', function(req, res) {
       if (err)
         console.log("Failed to look up connected user in Users");
 
-      users.forEach(function(user){
-        connected_data.push({
-          uid: user.uid,
-          name: user.name,
-          device_type: user.device_type
+      if (users) {
+        users.forEach(function(user){
+          connected_data.push({
+            uid: user.uid,
+            name: user.name,
+            device_type: user.device_type
+          });
         });
-      });
+      }
 
       res.status(200).json({
         connected_data: connected_data

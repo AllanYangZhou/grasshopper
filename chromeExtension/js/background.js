@@ -13,8 +13,6 @@ function registerCallback(registrationId) {
 
 function sendRegistrationId(callback) {
   // send registration to your application server
-  // in a secure way.
-  //alert(regId);
   var data = {
     "uid": regId,
     "name": "BOB",
@@ -32,8 +30,9 @@ function sendRegistrationId(callback) {
 
 function startRegistration() {
   chrome.storage.local.get("registered", function(result) {
-    if (result["registered"])
+    if (result["registered"]) {
       return;
+    }
 
     var senderIds = ["990221519663"];
     chrome.gcm.register(senderIds, registerCallback);
@@ -41,4 +40,4 @@ function startRegistration() {
 }
 
 chrome.runtime.onInstalled.addListener(startRegistration);
-chrome.runtime.onStartup.addListener(startRegistration);
+//chrome.runtime.onStartup.addListener(startRegistration);
