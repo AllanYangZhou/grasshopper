@@ -14,8 +14,32 @@ function registerCallback(registrationId) {
 function sendRegistrationId(callback) {
   // send registration to your application server
   // in a secure way.
-  alert(regId);
-  callback(true);
+  //alert(regId);
+  var data = {
+    "uid": regId,
+    "name": "CHiCHICHICHIAAAAAAA",
+    "device_type": "Browser"
+  }
+
+  $.ajax(
+    method: "POST",
+    url: "40.122.208.196:3002",
+    data: data,
+    success: onSuccessSending,
+    error: onErrorSending,
+    )
+}
+
+function onSuccessSending(data, textStatus, xhr)
+{
+  console.log("YAS");
+  callback(true); 
+}
+
+function onErrorSending(data, textStatus, xhr)
+{
+  console.log("Unable to reach server.");
+  callback(false);  
 }
 
 function startRegistration() {
