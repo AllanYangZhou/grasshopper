@@ -2,7 +2,7 @@
   "manifest_version": 2,
 
   "name": "Grasshopper",
-  "description": "This extension will send the current URL to another extension",
+  "description": "Fast cross-platform context sharing",
   "version": "1.0",
 
   "browser_action": {

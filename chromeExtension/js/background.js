@@ -36,7 +36,7 @@ function startRegistration() {
 
     var senderIds = ["990221519663"];
     chrome.gcm.register(senderIds, registerCallback);
-  })
+  });
 }
 
 chrome.runtime.onInstalled.addListener(startRegistration);
