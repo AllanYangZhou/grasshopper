@@ -1,0 +1,23 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.calhacks.sendr.SelectDeviceToSend"
+    android:orientation="vertical">
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+id/list_device"
+        android:layout_gravity="center_horizontal" >
+    </ListView>
+
+    <Button
+        android:id="@+id/send_button_device_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_send"
+        android:onClick="onSendClicked" />
+
+</LinearLayout>

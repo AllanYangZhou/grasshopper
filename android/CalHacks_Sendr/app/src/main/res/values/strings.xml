@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Grasshopper</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_select_device_to_send">SelectDeviceToSend</string>
+    <string name="title_activity_chat_head">ChatHeadActivity</string>
+    <string name="edit_message">Enter Your Name</string>
+    <string name="button_send">Send</string>
+</resources>
