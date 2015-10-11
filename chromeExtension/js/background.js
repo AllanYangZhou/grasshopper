@@ -1,6 +1,9 @@
 function registerCallback(registrationId) {
   // le bad hack
   regId = registrationId;
+  chrome.storage.local.set({regId: regId}, function() {
+    console.log("Saved regId");
+  });
   if (chrome.runtime.lastError) {
     return;
   }
@@ -15,9 +18,13 @@ function sendRegistrationId(callback) {
   // send registration to your application server
   var data = {
     "uid": regId,
-    "name": "BOB",
+    "name": "Bob",
     "device_type": "desktop"
   };
+
+  chrome.storage.local.set({name: "Bob"}, function() {
+    console.log("Name changed!");
+  });
 
   $.ajax({
       method: "POST",
