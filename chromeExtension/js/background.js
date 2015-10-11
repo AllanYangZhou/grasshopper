@@ -44,5 +44,6 @@ chrome.runtime.onStartup.addListener(startRegistration);
 
 chrome.gcm.onMessage.addListener(function (message) {
   // load link
-  console.log(message);
+  var url = JSON.parse(message["data"]["content"])["message"];
+  chrome.tabs.create({ url: url });
 });
