@@ -60,7 +60,8 @@ router.post('/connect', function(req, res) {
     // construct list to query ConnectedUsers
     var list_of_uids = [];
     connected.forEach(function(connecteduser) {
-      list_of_uids.push({uid: connecteduser.uid});
+      if (connecteduser.uid !== uid)
+        list_of_uids.push({uid: connecteduser.uid});
     });
     // get the data for the connected people and send it as a response
     var connected_data = [];
