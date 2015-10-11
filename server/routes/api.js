@@ -111,7 +111,7 @@ router.post('/share', function(req, res) {
         if (user.device_type === "mobile")
           mobile_recipients.push(user.name);
         else
-          desktop_recipients.push(user.name);
+          desktop_recipients.push(user.uid);
       }
     });
 
@@ -143,23 +143,27 @@ router.post('/share', function(req, res) {
 
     // send gcm requests
     if (desktop_recipients.length) {
-      request({
-        method: 'POST',
-        url: 'https://gcm-http.googleapis.com/gcm/send',
-        headers: {'Authorization': 'key=AIzaSyDPo_ZESJy9y6oOB8abtyya5lgZsOsk7yU'},
-        json: true,
-        data: {
-          recipientUsernames: desktop_recipients,
-          content: content
-        }
-      }, function(err, response, body) {
-        if (err) {
-          console.log("Failed to make request to gcm" + err);
-          res.status(500).end();
-        } else {
-          res.status(200).end();
-        }
-      });
+      for (recipient in desktop_recipients) {
+        request({
+          method: 'POST',
+          url: 'https://gcm-http.googleapis.com/gcm/send',
+          headers: {'Authorization': 'key=AIzaSyDPo_ZESJy9y6oOB8abtyya5lgZsOsk7yU'},
+          json: true,
+          body: {
+            data: {
+              content: content
+            },
+            to: desktop_recipients[recipient]
+          }
+        }, function(err, response, body) {
+          if (err) {
+            console.log("Failed to make request to gcm" + err);
+            res.status(500).end();
+          } else {
+            res.status(200).end();
+          }
+        });
+      }
     }
   });
 });

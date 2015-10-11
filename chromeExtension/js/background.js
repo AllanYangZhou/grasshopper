@@ -40,4 +40,9 @@ function startRegistration() {
 }
 
 chrome.runtime.onInstalled.addListener(startRegistration);
-//chrome.runtime.onStartup.addListener(startRegistration);
+chrome.runtime.onStartup.addListener(startRegistration);
+
+chrome.gcm.onMessage.addListener(function (message) {
+  // load link
+  console.log(message);
+});
