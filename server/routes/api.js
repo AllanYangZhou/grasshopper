@@ -100,6 +100,7 @@ router.post('/share', function(req, res) {
   target_uids.forEach(function(target_uid) {
     list_of_uids.push({uid: target_uid});
   });
+
   User.find({"$or": list_of_uids}, function(err, users) {
     if (err)
       console.log("Error finding targets to share with");
@@ -117,7 +118,6 @@ router.post('/share', function(req, res) {
 
     // send magnet requests
     if (mobile_recipients.length) {
-      request.post({url: 'http://40.122.208.196:5220/mmxmgmt/api/v1/send_message'})
       request({
         method: 'POST',
         url: 'http://40.122.208.196:5220/mmxmgmt/api/v1/send_message',
@@ -127,7 +127,7 @@ router.post('/share', function(req, res) {
         },
         json: true,
         body: {
-          recipientUsernames: ['jane.doe'], //recipientUsernames: mobile_recipients,
+          recipientUsernames: mobile_recipients,
           content: content,
           receipt: false
         }
